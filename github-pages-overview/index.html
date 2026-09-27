@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アナリティクス・ガードレール｜株式会社キューバリュー</title>
+<meta name="description" content="AIエージェントに分析を任せても、誰が実行しても同じ品質と安全性を保てる「分析環境」のご提案の全体像。指示・検知・制御の3つの仕組みと、導入までの4つのステップをご紹介します。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="株式会社キューバリュー">
+<meta property="og:title" content="アナリティクス・ガードレール｜株式会社キューバリュー">
+<meta property="og:description" content="AIエージェントに分析を任せても、誰が実行しても同じ品質と安全性を保てる「分析環境」のご提案の全体像。指示・検知・制御の3つの仕組みと、導入までの4つのステップをご紹介します。">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="アナリティクス・ガードレール｜株式会社キューバリュー">
+<meta name="twitter:description" content="AIエージェントに分析を任せても、誰が実行しても同じ品質と安全性を保てる「分析環境」のご提案の全体像。指示・検知・制御の3つの仕組みと、導入までの4つのステップをご紹介します。">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+  :root {
+    --ink: #1a2438;
+    --ink-muted: #57627a;
+    --ink-faint: #8791a5;
+    --paper: #eef1f5;
+    --surface: #ffffff;
+    --surface-sunken: #f4f6f9;
+    --line: rgba(26,36,56,0.07);
+    --line-strong: #d7dde6;
+    --accent: #1b4f8c;
+    --accent-ink: #123a68;
+    --accent-tint: #e3edf8;
+    --safety: #c97b1d;
+    --safety-ink: #9c5f13;
+    --safety-tint: #fbeedd;
+    --shadow: 0 1px 2px rgba(19,28,46,0.05), 0 16px 36px -20px rgba(19,28,46,0.28);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e8ecf3;
+      --ink-muted: #aab3c6;
+      --ink-faint: #767f95;
+      --paper: #11161f;
+      --surface: #171d29;
+      --surface-sunken: #1d2431;
+      --line: rgba(232,236,243,0.08);
+      --line-strong: #2c3444;
+      --accent: #6fa3e0;
+      --accent-ink: #bcd6f5;
+      --accent-tint: #1c2b40;
+      --safety: #e3a64e;
+      --safety-ink: #f4cc8d;
+      --safety-tint: #33270f;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 16px 36px -20px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e8ecf3;
+    --ink-muted: #aab3c6;
+    --ink-faint: #767f95;
+    --paper: #11161f;
+    --surface: #171d29;
+    --surface-sunken: #1d2431;
+    --line: rgba(232,236,243,0.08);
+    --line-strong: #2c3444;
+    --accent: #6fa3e0;
+    --accent-ink: #bcd6f5;
+    --accent-tint: #1c2b40;
+    --safety: #e3a64e;
+    --safety-ink: #f4cc8d;
+    --safety-tint: #33270f;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 16px 36px -20px rgba(0,0,0,0.6);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px),
+      var(--paper);
+    background-size: 34px 34px, 34px 34px, auto;
+    color: var(--ink);
+    font-family: "Noto Sans JP", "Hiragino Sans", sans-serif;
+    font-size: 15.5px;
+    line-height: 1.75;
+  }
+
+  .page { max-width: 1040px; margin: 0 auto; padding: 56px 22px 90px; }
+
+  h1, h2, h3 { font-family: "M PLUS 1", "Noto Sans JP", sans-serif; text-wrap: balance; color: var(--ink); margin: 0; }
+
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 18px; height: 1px;
+    background: var(--accent);
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    padding: 44px 40px 40px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    margin-bottom: 56px;
+  }
+  .corner { position: absolute; width: 22px; height: 22px; border-color: var(--accent); opacity: 0.55; }
+  .corner.tl { top: 10px; left: 10px; border-top: 2px solid; border-left: 2px solid; }
+  .corner.tr { top: 10px; right: 10px; border-top: 2px solid; border-right: 2px solid; }
+  .corner.bl { bottom: 10px; left: 10px; border-bottom: 2px solid; border-left: 2px solid; }
+  .corner.br { bottom: 10px; right: 10px; border-bottom: 2px solid; border-right: 2px solid; }
+
+  .hero h1 {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    margin: 18px 0 14px;
+    max-width: 18ch;
+  }
+  .hero .subtitle {
+    font-family: "M PLUS 1", "Noto Sans JP", sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--accent-ink);
+    margin: 0 0 22px;
+    padding-left: 14px;
+    border-left: 3px solid var(--safety);
+  }
+  .hero .lede {
+    font-size: 16px;
+    color: var(--ink-muted);
+    max-width: 58ch;
+  }
+  .hero .lede b { color: var(--ink); font-weight: 700; }
+
+  .doc-ref {
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line-strong);
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .doc-ref .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-muted);
+  }
+
+  /* ---------- SECTION HEADS ---------- */
+  section { margin-bottom: 60px; }
+  .section-head { margin-bottom: 26px; max-width: 62ch; }
+  .section-head h2 {
+    font-size: 25px;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+  .section-head p {
+    color: var(--ink-muted);
+    font-size: 14.5px;
+    margin-top: 10px;
+  }
+
+  /* ---------- PRINCIPLES ---------- */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .principle {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .principle .icon {
+    width: 42px; height: 42px;
+    color: var(--safety);
+  }
+  .principle .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+  .principle h3 {
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .principle p {
+    font-size: 13.6px;
+    color: var(--ink-muted);
+  }
+
+  /* ---------- MECHANISM DIAGRAM ---------- */
+  .mechanism {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 28px 26px 22px;
+    box-shadow: var(--shadow);
+  }
+  .mechanism .scenario {
+    font-size: 13.8px;
+    color: var(--ink-muted);
+    margin: 0 0 20px;
+  }
+  .mechanism .scenario b {
+    color: var(--ink);
+    font-weight: 700;
+    background: var(--accent-tint);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+  .mechanism figure { margin: 0; }
+  .mechanism svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .mechanism figcaption {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line-strong);
+    font-size: 12.8px;
+    color: var(--ink-muted);
+    line-height: 1.75;
+  }
+  .dg-box { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; }
+  .dg-gate { fill: var(--safety-tint); stroke: var(--safety); stroke-width: 1.8; }
+  .dg-exception { fill: var(--surface-sunken); stroke: var(--safety); stroke-width: 1.4; stroke-dasharray: 5 4; }
+  .dg-arrow { stroke: var(--ink-faint); stroke-width: 1.6; fill: none; }
+  .dg-arrowhead { fill: var(--ink-faint); }
+  .dg-label { font-family: "Noto Sans JP", sans-serif; font-weight: 700; fill: var(--ink); }
+  .dg-sub { font-family: "Noto Sans JP", sans-serif; fill: var(--ink-muted); }
+  .dg-tag { font-family: "JetBrains Mono", monospace; font-weight: 600; fill: var(--safety-ink); letter-spacing: 0.04em; }
+  .dg-edge { font-family: "JetBrains Mono", monospace; fill: var(--ink-faint); }
+
+  /* ---------- ROADMAP ---------- */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--line-strong);
+    position: relative;
+  }
+  .phase {
+    padding: 22px 18px 0;
+    border-right: 1px solid var(--line-strong);
+    position: relative;
+  }
+  .phase:last-child { border-right: none; }
+  .phase::before {
+    content: "";
+    position: absolute;
+    top: -2px; left: 0;
+    width: 34px; height: 2px;
+    background: var(--accent);
+  }
+  .phase .step {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  .phase h3 {
+    font-size: 16.5px;
+    font-weight: 700;
+    margin: 10px 0 10px;
+  }
+  .phase p {
+    font-size: 13.2px;
+    color: var(--ink-muted);
+    min-height: 84px;
+  }
+  .effort {
+    display: inline-block;
+    margin-top: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--safety-tint);
+    color: var(--safety-ink);
+    font-weight: 600;
+  }
+
+  /* ---------- VALUE GRID ---------- */
+  .values {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--line-strong);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .value {
+    background: var(--surface);
+    padding: 22px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .value .label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .value .desc {
+    font-size: 12.6px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+  .value .mark {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ---------- WHY US ---------- */
+  .whyus {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 30px 32px;
+    box-shadow: var(--shadow);
+  }
+  .whyus .risk {
+    font-size: 14.5px;
+    color: var(--ink-muted);
+    max-width: 72ch;
+    margin: 0 0 26px;
+  }
+  .whyus .risk b { color: var(--ink); font-weight: 700; }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 28px;
+    margin-bottom: 26px;
+  }
+  .pillar {
+    display: flex;
+    gap: 14px;
+    padding: 4px 0;
+  }
+  .pillar .idx {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--safety-ink);
+    background: var(--safety-tint);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-weight: 700;
+  }
+  .pillar h4 {
+    font-family: "M PLUS 1", sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 5px;
+  }
+  .pillar p {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+  .mission-quote {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--accent-tint);
+    border-radius: 4px;
+    padding: 18px 22px;
+    flex-wrap: wrap;
+  }
+  .mission-quote .mark {
+    font-family: "M PLUS 1", sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .mission-quote blockquote {
+    margin: 0;
+    font-family: "M PLUS 1", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent-ink);
+    flex: 1;
+    min-width: 240px;
+  }
+  .mission-quote cite {
+    display: block;
+    margin-top: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-style: normal;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- SIGNOFF ---------- */
+  .signoff {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 28px 30px;
+  }
+  .signoff ul {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 28px;
+  }
+  .signoff li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13.8px;
+    color: var(--ink-muted);
+  }
+  .signoff li::before {
+    content: "✓";
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent-tint);
+    color: var(--accent-ink);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* ---------- CLOSING ---------- */
+  .closing {
+    background: var(--accent);
+    color: #fdfcfa;
+    border-radius: 4px;
+    padding: 34px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .closing h2 { color: #fdfcfa; font-size: 21px; max-width: 34ch; }
+  .closing p { color: #dbe6f4; font-size: 13.6px; margin-top: 8px; max-width: 44ch; }
+  .closing .arrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--safety-tint);
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.28);
+    padding: 10px 18px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  footer {
+    margin-top: 40px;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    text-align: right;
+  }
+
+  @media (max-width: 860px) {
+    .principles { grid-template-columns: 1fr; }
+    .roadmap { grid-template-columns: 1fr; }
+    .phase { border-right: none; border-bottom: 1px solid var(--line-strong); padding-bottom: 20px; }
+    .phase p { min-height: 0; }
+    .values { grid-template-columns: 1fr 1fr; }
+    .signoff ul { grid-template-columns: 1fr; }
+    .pillars { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <span class="eyebrow">ご提案の全体像</span>
+    <h1>同じ問いに、いつも同じ確かな答えを。</h1>
+    <p class="subtitle">属人化しない分析を、仕組みでつくる。</p>
+    <p class="lede">
+      AIエージェントに分析を任せる時代、成果を左右するのは<b>「プロンプトの上手さ」ではありません</b>。
+      問われるのは、その裏側で「何を正しいとするか」を設計する力です。私たちがご用意するのは、
+      <b>豊富な現場経験を持つデータサイエンティスト・データアナリストが設計した</b>、
+      担当者が誰であっても、いつ実行しても同じ品質と安全性を保つ<b>「分析環境」そのもの</b>です。
+      ここでは、その全体像を要点だけでご紹介します。
+    </p>
+    <div class="doc-ref">
+      <span class="tag">詳細版</span>
+      <span>実装手順・ファイル構成まで踏み込んだ技術資料は別途ご用意しています。本資料はその導入編です。</span>
+    </div>
+  </div>
+
+  <!-- PRINCIPLES -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">支える3つの原則</span>
+      <h2>うまい指示だけに頼らない、3層の仕組み</h2>
+      <p>「プロンプトの書き方」に依存する運用は、担当者のスキルや聞き方次第で結果が変わってしまいます。私たちが用意するのは、その場でうまく頼む工夫ではなく、指示・検知・制御という3つの層を<b style="color:var(--ink);">環境そのものに組み込んでおく</b>仕組みです。</p>
+    </div>
+    <div class="principles">
+
+      <div class="principle">
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M24 6v36"/>
+          <path d="M24 12h14l-4 5 4 5H24z"/>
+          <path d="M24 24H12l4 5-4 5h12"/>
+        </svg>
+        <span class="num mono">01 — GUIDE</span>
+        <h3>指示で導く</h3>
+        <p>何を優先し、何を避けるべきか。担当者がその都度考えて伝えるのではなく、行動指針として<b style="color:var(--ink); font-weight:700;">環境にあらかじめ組み込んでおく</b>ことで、誰が使っても同じ指示が自動的に働きます。</p>
+      </div>
+
+      <div class="principle">
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="10" y="8" width="22" height="30" rx="1.5"/>
+          <path d="M15 16h12M15 22h12M15 28h7"/>
+          <circle cx="32" cy="32" r="7"/>
+          <path d="M37 37l5 5"/>
+        </svg>
+        <span class="num mono">02 — DETECT</span>
+        <h3>仕組みで検知する</h3>
+        <p>出来上がったコードやクエリは、プログラムが自動でチェック。ルール違反や崩れた出力はその場で弾かれます。</p>
+      </div>
+
+      <div class="principle">
+        <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 40V14M40 40V14"/>
+          <path d="M8 18l30-6"/>
+          <path d="M8 14h4M36 8h4"/>
+        </svg>
+        <span class="num mono">03 — RESTRICT</span>
+        <h3>境界で制御する</h3>
+        <p>AIが直接触れられる範囲そのものを、あらかじめ物理的に制限。想定外のデータ操作やコスト超過が構造上起こらないようにします。</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MECHANISM -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">具体例で見る動き</span>
+      <h2>依頼から結果まで、AIはこう動きます</h2>
+      <p>3つの原則が、実際の依頼1件に対してどう働くのかを図にしました。AIが自分の判断だけで先に進めない関門が、途中に2つあります。</p>
+    </div>
+    <div class="mechanism">
+      <p class="scenario">依頼例: 営業担当者が <b>「先月の優良顧客リストを出して」</b> とAIエージェントに頼んだ場合の流れ。</p>
+      <figure>
+        <svg viewBox="0 0 1280 330" role="img" aria-label="依頼からAIエージェントが下書きを作り、ナレッジ確認と自動チェックという2つの関門を通過したうえで、承認を経て限定された経路でのみ実行し、一貫した結果を出すまでの流れ図。ナレッジ確認で基準を満たさない場合はそこで停止して人に報告し、自動チェックで基準を満たさない場合は差し戻されて下書き作成からやり直す。">
+          <defs>
+            <marker id="dgArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="dg-arrowhead" d="M0,0 L10,5 L0,10 z"/>
+            </marker>
+          </defs>
+
+          <!-- main flow arrows -->
+          <line class="dg-arrow" x1="192" y1="92" x2="227" y2="92" marker-end="url(#dgArrow)"/>
+          <text class="dg-edge" x="210" y="82" font-size="10" text-anchor="middle">確認</text>
+
+          <line class="dg-arrow" x1="403" y1="92" x2="438" y2="92" marker-end="url(#dgArrow)"/>
+          <text class="dg-edge" x="420" y="82" font-size="10" text-anchor="middle">OK</text>
+
+          <line class="dg-arrow" x1="613" y1="92" x2="648" y2="92" marker-end="url(#dgArrow)"/>
+          <text class="dg-edge" x="630" y="82" font-size="10" text-anchor="middle">提出</text>
+
+          <line class="dg-arrow" x1="823" y1="92" x2="858" y2="92" marker-end="url(#dgArrow)"/>
+          <text class="dg-edge" x="840" y="82" font-size="10" text-anchor="middle">OK</text>
+
+          <line class="dg-arrow" x1="1053" y1="92" x2="1078" y2="92" marker-end="url(#dgArrow)"/>
+          <text class="dg-edge" x="1065" y="82" font-size="10" text-anchor="middle">実行後</text>
+
+          <!-- NG branches -->
+          <line class="dg-arrow" x1="315" y1="140" x2="315" y2="227" marker-end="url(#dgArrow)"/>
+          <text class="dg-edge" x="323" y="188" font-size="10">NG</text>
+
+          <line class="dg-arrow" x1="735" y1="140" x2="735" y2="227" marker-end="url(#dgArrow)"/>
+          <text class="dg-edge" x="743" y="188" font-size="10">NG</text>
+
+          <!-- col1: 依頼 -->
+          <rect class="dg-box" x="20" y="60" width="170" height="64" rx="3"/>
+          <text class="dg-label" x="105" y="97" font-size="14" text-anchor="middle">依頼</text>
+          <text class="dg-sub" x="105" y="150" font-size="11" text-anchor="middle">「優良顧客リストが欲しい」</text>
+
+          <!-- col2: ナレッジ確認 (GUIDE) -->
+          <text class="dg-tag" x="315" y="26" font-size="10.5" text-anchor="middle">GUIDE</text>
+          <polygon class="dg-gate" points="230,92 315,46 400,92 315,138"/>
+          <text class="dg-label" x="315" y="97" font-size="13" text-anchor="middle">ナレッジ確認</text>
+
+          <!-- col3: 下書き作成 -->
+          <rect class="dg-box" x="440" y="60" width="170" height="64" rx="3"/>
+          <text class="dg-label" x="525" y="97" font-size="14" text-anchor="middle">下書き作成</text>
+          <text class="dg-sub" x="525" y="150" font-size="11" text-anchor="middle">(規約・過去SQLを参照)</text>
+
+          <!-- col4: 自動チェック (DETECT) -->
+          <text class="dg-tag" x="735" y="26" font-size="10.5" text-anchor="middle">DETECT</text>
+          <polygon class="dg-gate" points="650,92 735,46 820,92 735,138"/>
+          <text class="dg-label" x="735" y="97" font-size="13" text-anchor="middle">自動チェック</text>
+
+          <!-- col5: 承認 → 限定実行 (RESTRICT) -->
+          <text class="dg-tag" x="955" y="26" font-size="10.5" text-anchor="middle">RESTRICT</text>
+          <rect class="dg-gate" x="860" y="60" width="190" height="64" rx="3"/>
+          <line class="dg-arrow" x1="874" y1="52" x2="874" y2="72" />
+          <line class="dg-arrow" x1="1036" y1="52" x2="1036" y2="72" />
+          <text class="dg-label" x="955" y="92" font-size="12.5" text-anchor="middle">承認 →</text>
+          <text class="dg-label" x="955" y="110" font-size="12.5" text-anchor="middle">限定実行</text>
+
+          <!-- col6: 一貫した結果 -->
+          <rect class="dg-box" x="1080" y="60" width="170" height="64" rx="3"/>
+          <text class="dg-label" x="1165" y="97" font-size="14" text-anchor="middle">一貫した結果</text>
+          <text class="dg-sub" x="1165" y="150" font-size="11" text-anchor="middle">(担当者によらず同じ)</text>
+
+          <!-- exception 1: knowledge missing -->
+          <rect class="dg-exception" x="210" y="230" width="210" height="70" rx="3"/>
+          <text class="dg-label" x="315" y="258" font-size="13" text-anchor="middle">止まって報告</text>
+          <text class="dg-sub" x="315" y="277" font-size="11" text-anchor="middle">ナレッジ不足のまま進めない</text>
+
+          <!-- exception 2: check failed -->
+          <rect class="dg-exception" x="630" y="230" width="210" height="70" rx="3"/>
+          <text class="dg-label" x="735" y="258" font-size="13" text-anchor="middle">自動で差し戻し</text>
+          <text class="dg-sub" x="735" y="277" font-size="11" text-anchor="middle">修正して再提出</text>
+        </svg>
+        <figcaption>
+          依頼から結果に至るまで、AIは<b style="color:var(--ink); font-weight:700;">2つの関門</b>を自分の判断だけでは通過できません。参照すべきナレッジが揃っていなければ推測で進まず止まって報告し（GUIDE）、下書きがコスト・書式の基準を満たさなければプログラムが自動で差し戻します（DETECT）。両方を満たしたものだけが、人の承認を経て限定された経路で実行されます（RESTRICT）。
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">導入までの4つのステップ</span>
+      <h2>土台づくりから、運用の拡張まで</h2>
+      <p>いきなり全部を作り込むのではなく、優先度の高い安全網から段階的に積み上げていきます。</p>
+    </div>
+    <div class="roadmap">
+
+      <div class="phase">
+        <span class="step">PHASE 00</span>
+        <h3>土台をつくる</h3>
+        <p>誰のパソコンで動かしても、同じ環境・同じ結果になる基盤を用意します。</p>
+        <span class="effort">目安 1週間</span>
+      </div>
+
+      <div class="phase">
+        <span class="step">PHASE 01</span>
+        <h3>安全な接続をひく</h3>
+        <p>社内データベースや資料への"一本道"の接続経路を用意。わからないことがあれば、AIは推測せず立ち止まって報告します。</p>
+        <span class="effort">目安 1〜2週間（接続用アプリの構築は別途 約7〜12週間）</span>
+      </div>
+
+      <div class="phase">
+        <span class="step">PHASE 02</span>
+        <h3>チェックと承認を仕込む</h3>
+        <p>内容を人が確認してから実行に進む仕組みと、コスト超過・品質崩れを自動で防ぐチェックを組み込みます。</p>
+        <span class="effort">目安 1〜3週間</span>
+      </div>
+
+      <div class="phase">
+        <span class="step">PHASE 03</span>
+        <h3>運用を育てていく</h3>
+        <p>案件やチームの成熟度に合わせ、必要な機能だけを選んで有効化。無理なく運用を広げられます。</p>
+        <span class="effort">継続運用</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VALUE -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">この環境がもたらすもの</span>
+      <h2>属人化しない分析体制へ</h2>
+    </div>
+    <div class="values">
+      <div class="value"><span class="mark"></span><span class="label">再現性</span><span class="desc">誰が実行しても同じ結果に。担当者交代の影響を受けません。</span></div>
+      <div class="value"><span class="mark"></span><span class="label">コストの制御</span><span class="desc">高額なクエリ実行を、走らせる前に未然に防止します。</span></div>
+      <div class="value"><span class="mark"></span><span class="label">品質の担保</span><span class="desc">崩れた出力やルール違反をプログラムが自動で検知します。</span></div>
+      <div class="value"><span class="mark"></span><span class="label">安全性</span><span class="desc">AIが触れられる範囲をあらかじめ限定しておきます。</span></div>
+      <div class="value"><span class="mark"></span><span class="label">拡張性</span><span class="desc">必要な機能だけを選んで、無理なく育てていけます。</span></div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">なぜ私たちが手がけるのか</span>
+      <h2>仕組みだけでは、正しい分析にはなりません。</h2>
+    </div>
+    <div class="whyus">
+      <p class="risk">
+        AIエージェントは、一見それらしい分析結果を返します。しかしその裏にある<b>データの定義や前提が整っていなければ、精度の低い結果が「正しいもの」として意思決定に使われてしまう</b>危うさがあります。
+        ここまでご紹介した仕組み（指示・検知・制御）は、あくまで器です。その中に何を指示として書き込み、何を基準にチェックするかを正しく設計できて初めて、意味のある安全網になります。
+        私たちキューバリューは、データ分析を専門としてきた立場から、その"中身"の設計を担います。
+      </p>
+      <div class="pillars">
+        <div class="pillar">
+          <span class="idx">1</span>
+          <div>
+            <h4>現場に入り込んで、本質を見極める</h4>
+            <p>ツールの改善提案から入るのではなく、独自のフレームワークで課題の本質から特定。現場担当者・意思決定者を巻き込み、1つのチームとして取り組みます。</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="idx">2</span>
+          <div>
+            <h4>現場を知る専門家が「正しさ」を定義する</h4>
+            <p>経営・事業企画・マーケティング・会計まで、実際に手を動かしてきた専門家が「何を優先し、何を避けるべきか」を定義します。</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="idx">3</span>
+          <div>
+            <h4>型にはめない、伴走型の支援</h4>
+            <p>既製のフレームワークを押し付けず、貴社固有の悩みに寄り添いながら、小さな組織だからこその小回りで最後まで伴走します。</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="idx">4</span>
+          <div>
+            <h4>AIでは見つけられない課題を見つける</h4>
+            <p>AIはデータから答えを出すのは得意でも、「そもそも何が課題か」という現場の暗黙知までは見つけられません。そこに向き合ってきた専門性を、環境の設計に反映します。</p>
+          </div>
+        </div>
+      </div>
+      <div class="mission-quote">
+        <span class="mark">“</span>
+        <blockquote>データ価値の探索的最大化による顧客ビジネスへの貢献<cite>株式会社キューバリュー ミッション</cite></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNOFF -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">導入完了の目安</span>
+      <h2>「動いている」をどう確認するか</h2>
+    </div>
+    <div class="signoff">
+      <ul>
+        <li>クローンして接続設定を済ませれば、すぐに作業を始められる</li>
+        <li>参照する情報が古い・空のときは、AIが推測せず止まって報告する</li>
+        <li>承認前の状態では、分析クエリが実行されない</li>
+        <li>禁止された書き方のクエリは、実行前に自動で弾かれる</li>
+        <li>規約に沿わないレポートは、出力自体が止まる</li>
+        <li>これらすべてが、担当者や実行タイミングによらず一貫して成り立つ</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <div class="closing">
+    <div>
+      <h2>次のステップへ</h2>
+      <p>貴社の現状の分析体制をお伺いしながら、この4フェーズをどう当てはめていくか、具体的な導入計画をご説明させてください。</p>
+    </div>
+    <span class="arrow mono">詳細のご相談 →</span>
+  </div>
+
+  <footer>株式会社キューバリュー ／ 導入編資料 ／ 詳細な実装仕様は技術資料にてご案内します</footer>
+
+</div>
+</body>
+</html>
