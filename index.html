@@ -2,9 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>アナリティクス・ガードレール｜株式会社キューバリュー</title>
 <meta name="description" content="AIエージェントに分析を任せても、誰が実行しても同じ品質と安全性を保てる「分析環境」のご提案の全体像。指示・検知・制御の3つの仕組みと、導入までの4つのステップをご紹介します。">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500;600&display=swap">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:site_name" content="株式会社キューバリュー">
@@ -13,7 +14,6 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="アナリティクス・ガードレール｜株式会社キューバリュー">
 <meta name="twitter:description" content="AIエージェントに分析を任せても、誰が実行しても同じ品質と安全性を保てる「分析環境」のご提案の全体像。指示・検知・制御の3つの仕組みと、導入までの4つのステップをご紹介します。">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500;600&display=swap">
 <style>
   :root {
     --ink: #1a2438;
@@ -126,6 +126,7 @@
   .hero h1 {
     font-size: 40px;
     font-weight: 800;
+    line-height: 1.35;
     letter-spacing: 0.01em;
     margin: 18px 0 14px;
     max-width: 18ch;
@@ -142,7 +143,6 @@
   .hero .lede {
     font-size: 16px;
     color: var(--ink-muted);
-    max-width: 58ch;
   }
   .hero .lede b { color: var(--ink); font-weight: 700; }
 
@@ -470,7 +470,8 @@
     flex-wrap: wrap;
   }
   .closing h2 { color: #fdfcfa; font-size: 21px; max-width: 34ch; }
-  .closing p { color: #dbe6f4; font-size: 13.6px; margin-top: 8px; max-width: 44ch; }
+  .closing p { color: #dbe6f4; font-size: 13.6px; margin: 8px 0 0; }
+  .closing p + p { margin-top: 10px; }
   .closing .arrow {
     display: inline-block;
     font-family: "JetBrains Mono", monospace;
@@ -509,6 +510,7 @@
 </style>
 </head>
 <body>
+
 
 <div class="page">
 
@@ -794,7 +796,8 @@
   <div class="closing">
     <div>
       <h2>次のステップへ</h2>
-      <p>まずは貴社のデータ状況や分析環境の現状をお話いただく部分からでもご相談ください。<br>その後、状況や分析体制をお伺いしながらこの4フェーズをどう当てはめていくか、具体的な導入計画をご相談させてください。</p>
+      <p>まずは貴社のデータ状況や分析環境の現状をお話いただく部分からでもご相談ください。</p>
+      <p>その後、状況や分析体制をお伺いしながらこの4フェーズをどう当てはめていくか、具体的な導入計画をご相談させてください。</p>
     </div>
     <a class="arrow mono" href="https://www.quevalue.co.jp/contact/">詳細のご相談 →</a>
   </div>
@@ -802,5 +805,6 @@
   <footer>株式会社キューバリュー ／ 導入編資料 ／ 詳細な実装仕様は技術資料にてご案内します</footer>
 
 </div>
+
 </body>
 </html>
