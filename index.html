@@ -472,6 +472,7 @@
   .closing h2 { color: #fdfcfa; font-size: 21px; max-width: 34ch; }
   .closing p { color: #dbe6f4; font-size: 13.6px; margin-top: 8px; max-width: 44ch; }
   .closing .arrow {
+    display: inline-block;
     font-family: "JetBrains Mono", monospace;
     font-size: 13px;
     color: var(--safety-tint);
@@ -480,6 +481,12 @@
     padding: 10px 18px;
     border-radius: 999px;
     white-space: nowrap;
+    text-decoration: none;
+    transition: background 120ms ease, border-color 120ms ease;
+  }
+  .closing .arrow:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.42);
   }
 
   footer {
@@ -789,7 +796,7 @@
       <h2>次のステップへ</h2>
       <p>貴社の現状の分析体制をお伺いしながら、この4フェーズをどう当てはめていくか、具体的な導入計画をご説明させてください。</p>
     </div>
-    <span class="arrow mono">詳細のご相談 →</span>
+    <a class="arrow mono" href="https://www.quevalue.co.jp/contact/">詳細のご相談 →</a>
   </div>
 
   <footer>株式会社キューバリュー ／ 導入編資料 ／ 詳細な実装仕様は技術資料にてご案内します</footer>
