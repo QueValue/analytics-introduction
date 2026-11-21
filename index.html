@@ -136,7 +136,6 @@ gtag('config', 'G-6X1MNPDLHD');
     line-height: 1.35;
     letter-spacing: 0.01em;
     margin: 18px 0 14px;
-    max-width: 18ch;
   }
   .hero .subtitle {
     font-family: "M PLUS 1", "Noto Sans JP", sans-serif;
@@ -261,6 +260,52 @@ gtag('config', 'G-6X1MNPDLHD');
   .dg-sub { font-family: "Noto Sans JP", sans-serif; fill: var(--ink-muted); }
   .dg-tag { font-family: "JetBrains Mono", monospace; font-weight: 600; fill: var(--safety-ink); letter-spacing: 0.04em; }
   .dg-edge { font-family: "JetBrains Mono", monospace; fill: var(--ink-faint); }
+
+  /* ---------- STAGES (mock) ---------- */
+  .nb { display: inline-block; }
+  .stages-section .section-head { max-width: none; }
+  .stages-lead { color: var(--ink-muted); font-size: 14.5px; margin: 10px 0 0; }
+  .stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-items: stretch; }
+  .stage {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 18px 16px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .stage .no { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; color: var(--ink-faint); letter-spacing: 0.08em; }
+  .stage h3 { font-size: 16.5px; font-weight: 700; }
+  .stage .gist { font-size: 12.8px; color: var(--accent-ink); font-weight: 700; }
+  .stage p { margin: 4px 0 0; font-size: 13px; color: var(--ink-muted); line-height: 1.65; }
+  .stage.core {
+    border: 2px solid var(--safety);
+    background: var(--safety-tint);
+    box-shadow: var(--shadow);
+  }
+  .stage.core .no { color: var(--safety-ink); }
+  .stage.core .gist { color: var(--safety-ink); }
+  .stage .flag {
+    align-self: flex-start;
+    font-family: "JetBrains Mono", monospace; font-size: 10.5px; font-weight: 700;
+    padding: 2px 8px; border-radius: 999px;
+    background: var(--safety); color: #fff;
+  }
+  .stage.ext .flag { background: var(--surface-sunken, var(--accent-tint)); color: var(--ink-muted); border: 1px solid var(--line-strong); }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .chips span {
+    font-size: 11.5px; font-weight: 500;
+    padding: 2px 8px; border-radius: 4px;
+    background: var(--surface); border: 1px solid var(--safety); color: var(--safety-ink);
+  }
+  .stages-note {
+    margin-top: 16px; padding: 14px 18px;
+    border-left: 4px solid var(--accent); background: var(--accent-tint);
+    font-family: "M PLUS 1", "Noto Sans JP", sans-serif; font-weight: 700; font-size: 15px; color: var(--accent-ink);
+    border-radius: 0 4px 4px 0;
+  }
+  @media (max-width: 860px) {
+    .stages { grid-template-columns: 1fr; }
+  }
 
   /* ---------- ROADMAP ---------- */
   .roadmap {
@@ -526,10 +571,10 @@ gtag('config', 'G-6X1MNPDLHD');
     <span class="corner tl"></span><span class="corner tr"></span>
     <span class="corner bl"></span><span class="corner br"></span>
     <span class="eyebrow">ご提案の全体像</span>
-    <h1>同じ問いに、いつも同じ確かな答えを。</h1>
-    <p class="subtitle">属人化しない分析を、仕組みでつくる。</p>
+    <h1><span class="nb">分析のプロがいない現場でも、</span><span class="nb">確かな答えが出せる環境をつくる。</span></h1>
+    <p class="subtitle">同じ問いに、いつも同じ確かな答えを。</p>
     <p class="lede">
-      AIエージェントに分析を任せる時代、成果を左右するのは<b>「プロンプトの上手さ」ではありません</b>。
+      専門のアナリストがいなくても、現場の担当者がAIエージェントに分析を任せられるように。成果を左右するのは<b>「プロンプトの上手さ」ではありません</b>。
       問われるのは、その裏側で「何を正しいとするか」を設計する力です。私たちがご用意するのは、
       <b>豊富な現場経験を持つデータサイエンティスト・データアナリストが設計した</b>、
       担当者が誰であっても、いつ実行しても同じ品質と安全性を保つ<b>「分析環境」そのもの</b>です。
@@ -540,6 +585,53 @@ gtag('config', 'G-6X1MNPDLHD');
       <span>実装手順・ファイル構成まで踏み込んだ技術資料は別途ご用意しています。本資料はその導入編です。</span>
     </div>
   </div>
+
+  <!-- STAGES (mock) -->
+  <section class="stages-section">
+    <div class="section-head">
+      <span class="eyebrow">整えるべき4つのこと</span>
+      <h2>現場でAIに分析を任せるために、何を整えるべきか</h2>
+      <p class="stages-lead">現場担当者に分析を任せるには、AIの賢さだけでは足りません。頼み方・情報・仕組みを整え、その先の見守りの運用へ進むことで、担当者が誰でも、品質の安定した分析ができる状態をつくります。当サービスは、その中心となる「仕組み（ハーネス）」の設計を担います。</p>
+    </div>
+
+    <div class="stages">
+      <div class="stage">
+        <span class="no">STAGE 1</span>
+        <h3>プロンプト</h3>
+        <span class="gist">頼み方を工夫する</span>
+        <p>AIに伝える依頼文を工夫する段階です。取り組みやすい一方で、書く人の腕前によって、結果にばらつきが出ます。</p>
+      </div>
+      <div class="stage">
+        <span class="no">STAGE 2</span>
+        <h3>コンテキスト</h3>
+        <span class="gist">判断に使う情報を整える</span>
+        <p>用語や指標の定義、過去の分析例など、AIが判断のよりどころにする情報を用意し、推測で進ませないようにします。</p>
+      </div>
+      <div class="stage core">
+        <span class="flag">当サービスの中核</span>
+        <span class="no">STAGE 3</span>
+        <h3>ハーネス</h3>
+        <span class="gist">お願いを、ルールに変える</span>
+        <p>依頼文でお願いするのではなく、守られる仕組みにします。担当者が誰でも、同じ品質と安全性になります。</p>
+        <div class="chips">
+          <span>人の承認の関門</span>
+          <span>AIへの指示書</span>
+          <span>自動チェック</span>
+          <span>実行範囲の制限と確認</span>
+          <span>迷ったら止まって報告</span>
+        </div>
+      </div>
+      <div class="stage ext">
+        <span class="flag">今後の方向性</span>
+        <span class="no">STAGE 4</span>
+        <h3>ループ</h3>
+        <span class="gist">任せて、外から見守る</span>
+        <p>仕組みが整い、運用が安定したその先の姿です。AIが進める範囲を少しずつ広げ、人は結果を見守り、必要なときだけ判断する運用を目指します。</p>
+      </div>
+    </div>
+
+    <div class="stages-note">上手な頼み方を磨くより、仕組みで品質を揃える方法へ。</div>
+  </section>
 
   <!-- PRINCIPLES -->
   <section>
