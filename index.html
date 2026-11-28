@@ -261,7 +261,7 @@ gtag('config', 'G-6X1MNPDLHD');
   .dg-tag { font-family: "JetBrains Mono", monospace; font-weight: 600; fill: var(--safety-ink); letter-spacing: 0.04em; }
   .dg-edge { font-family: "JetBrains Mono", monospace; fill: var(--ink-faint); }
 
-  /* ---------- STAGES (mock) ---------- */
+  /* ---------- STAGES ---------- */
   .nb { display: inline-block; }
   .stages-section .section-head { max-width: none; }
   .stages-lead { color: var(--ink-muted); font-size: 14.5px; margin: 10px 0 0; }
@@ -660,6 +660,63 @@ gtag('config', 'G-6X1MNPDLHD');
     .whyus, .signoff, .mechanism { padding-inline: 18px; }
     .closing { padding: 26px 20px; }
   }
+
+  /* ===== first view ===== */
+  :root { --fv-warm: #fff0d6; --fv-cool: #e3eefb; --marker: #ffdc9c; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --fv-warm: #2c2417; --fv-cool: #182740; --marker: #6d4b12; }
+  }
+  :root[data-theme="dark"] { --fv-warm: #2c2417; --fv-cool: #182740; --marker: #6d4b12; }
+
+  .hero { background: linear-gradient(135deg, var(--fv-warm) 0%, var(--surface) 46%, var(--surface) 62%, var(--fv-cool) 100%); }
+  .hero h1 .hl { background: linear-gradient(transparent 64%, var(--marker) 64%, var(--marker) 94%, transparent 94%); padding: 0 2px; }
+  .hero-fig svg > rect.f-sunken { fill: var(--surface); opacity: 0.72; }
+  .doc-ref-end { margin: 0 0 8px; }
+  @media (max-width: 560px) { .hero-label { border-radius: 14px; } }
+
+  @media (min-width: 861px) {
+    .page { padding-top: 22px; }
+    .hero { padding: 24px 40px 20px; }
+    .hero h1 { font-size: 44px; line-height: 1.3; margin: 12px 0 10px; }
+    .hero .subtitle { font-size: 17.5px; margin-bottom: 12px; line-height: 1.55; }
+    .hero .lede { font-size: 14px; line-height: 1.7; margin: 0; }
+    .hero-fig { margin-top: 10px; }
+    /* keep the whole figure inside one screen on laptop heights */
+    .hero-fig .fig-scroll svg { max-height: clamp(270px, calc(100vh - 384px), 408px); }
+  }
+  @media (min-width: 1000px) { .hero-cta { position: static; margin: 0; } }
+  @media (min-width: 1060px) { .hero-cta { position: absolute; top: 88px; right: 40px; } }
+  @media (min-width: 861px) and (max-width: 1059px) {
+    .hero h1 { font-size: 38px; }
+    .hero-cta { margin-top: 14px !important; }
+  }
+  /* label emphasis */
+  .hero-label {
+    font-size: 19px; font-weight: 800; letter-spacing: 0.03em;
+    color: #fff; background: var(--accent); border: 0;
+    box-shadow: 0 6px 16px -8px rgba(18,58,104,0.55);
+  }
+  .hero-label .tk { font-size: 21px; margin: 0 5px; padding: 0 12px; }
+  :root[data-theme="dark"] .hero-label { color: #0f1724; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero-label { color: #0f1724; } }
+  @media (min-width: 861px) {
+    .hero .hero-fig .fig-scroll svg { max-height: clamp(260px, calc(100vh - 398px), 408px); }
+  }
+  @media (max-width: 560px) { .hero-label { font-size: 15px; } .hero-label .tk { font-size: 16px; padding: 0 9px; margin: 0 3px; } }
+
+  .hero-label { border-radius: 0 999px 999px 0; padding: 8px 28px 9px 40px; margin: 12px 0 0 -40px; }
+  .hero .corner.tl { display: none; }
+  @media (max-width: 560px) { .hero-label { margin-left: -20px; padding: 8px 18px 9px 20px; } }
+  @media (min-width: 861px) { .hero { padding-top: 16px; } }
+
+  /* phrase emphasis */
+  .hero-label .rest { font-size: 16px; font-weight: 700; }
+  @media (max-width: 560px) { .hero-label .rest { font-size: 13.5px; display: inline-block; } }
+
+  .hero-label .tk, :root[data-theme="dark"] .hero-label .tk { background: none; padding: 0; margin: 0 4px 0 0; font-size: 23px; color: #ffe45c; }
+  :root[data-theme="dark"] .hero-label .tk { color: #5a3a00; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero-label .tk { background: none; color: #5a3a00; } }
+  @media (max-width: 560px) { .hero-label .tk { font-size: 18px; } }
 </style>
 </head>
 <body>
@@ -671,8 +728,8 @@ gtag('config', 'G-6X1MNPDLHD');
   <div class="hero">
     <span class="corner tl"></span><span class="corner tr"></span>
     <span class="corner bl"></span><span class="corner br"></span>
-    <span class="hero-label">AIデータ分析に<em class="tk">特化</em>した環境構築サービス</span>
-    <h1><span class="nb">分析のプロがいない</span><span class="nb">現場でも、</span><span class="nb">確かな答えが出せる</span><span class="nb">環境をつくる。</span></h1>
+    <span class="hero-label"><em class="tk">AIデータ分析に特化</em><span class="rest">した環境構築サービス</span></span>
+    <h1><span class="nb">分析のプロがいない</span><span class="nb">現場でも、</span><span class="nb"><span class="hl">確かな答えが出せる</span></span><span class="nb">環境をつくる。</span></h1>
     <p class="subtitle"><span class="nb">問われるのはプロンプトの腕ではなく、</span><span class="nb">環境の設計。</span></p>
     <p class="lede">
       当社は、<b>AIデータ分析に特化した環境構築サービス</b>を提供しています。専門のアナリストがいなくても、現場の担当者がAIエージェントと共に分析を進められる状態をつくります。成果を左右するのは<b>「プロンプトの上手さ」ではありません</b>。
@@ -683,11 +740,11 @@ gtag('config', 'G-6X1MNPDLHD');
     </p>
     <figure class="hero-fig">
       <div class="fig-scroll">
-      <svg viewBox="0 0 960 430" role="img" aria-label="担当者ごとに聞き方が違っても、データ専門家が設計した分析環境の中で、AIエージェントがナレッジベース・自動チェック・MCP（安全な接続口）に支えられて分析し、求めている確かな答えが返る様子を表した図">
+      <svg viewBox="0 18 960 408" role="img" aria-label="担当者ごとに聞き方が違っても、データ専門家が設計した分析環境の中で、AIエージェントがナレッジベース・自動チェック・MCP（安全な接続口）に支えられて分析し、求めている確かな答えが返る様子を表した図">
         <defs>
           <marker id="hArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-faint"/></marker>
         </defs>
-        <rect width="960" height="430" rx="14" class="f-sunken"/>
+        <rect y="18" width="960" height="408" rx="14" class="f-sunken"/>
         
       <g transform="translate(70,52)">
         <path d="M-25 52 L-25 30 Q-25 17 -12 17 L12 17 Q25 17 25 30 L25 52 Z" class="f-accent"/>
@@ -811,13 +868,9 @@ gtag('config', 'G-6X1MNPDLHD');
       </div>
     </figure>
     <a class="hero-cta" href="https://www.quevalue.co.jp/contact/">詳細のご相談 →</a>
-    <div class="doc-ref">
-      <span class="tag">詳細版</span>
-      <span>実装手順・ファイル構成まで踏み込んだ技術資料は別途ご用意しています。本資料はその導入編です。</span>
-    </div>
   </div>
 
-  <!-- STAGES (mock) -->
+  <!-- STAGES -->
   <section class="stages-section">
     <div class="section-head">
       <span class="eyebrow">整えるべき4つのこと</span>
@@ -1185,6 +1238,10 @@ gtag('config', 'G-6X1MNPDLHD');
     <a class="arrow mono" href="https://www.quevalue.co.jp/contact/">詳細のご相談 →</a>
   </div>
 
+      <div class="doc-ref doc-ref-end">
+      <span class="tag">詳細版</span>
+      <span>実装手順・ファイル構成まで踏み込んだ技術資料は別途ご用意しています。本資料はその導入編です。</span>
+    </div>
   <footer>株式会社キューバリュー ／ 導入編資料 ／ 詳細な実装仕様は技術資料にてご案内します</footer>
 
 </div>
